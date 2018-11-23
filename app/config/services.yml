@@ -33,3 +33,10 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    AppBundle\WebService\GoogleTranslateInterface: '@AppBundle\WebService\GoogleTranslate'
+    AppBundle\WebService\GoogleTranslate:
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+        calls:
+            - [setApiKey, ['%google_translate_api_key%']]

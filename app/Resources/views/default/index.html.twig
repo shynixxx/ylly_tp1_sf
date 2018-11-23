@@ -5,7 +5,7 @@
         <div id="container">
             <div id="welcome">
                 <h1><span>Welcome to</span> Ylly ninja autotranlator</h1>
-                <h2>Languages current : {{ app.request.getLocale() }}</h2>
+                <h2>{{ subtitle }} : {{ app.request.getLocale() }}</h2>
                 <ul>
                     {% for lang in ['en', 'fr', 'it', 'es', 'de'] %}
                         <li><a href="{{ path('homepage', {'_locale': lang }) }}">{{ lang }}</a></li>
@@ -14,7 +14,7 @@
             </div>
             <div class="row">
                 <h1>Articles</h1>
-                {% for article in articles %}
+                {% for article in articles['articles'] %}
                     <h2>{{ article.translate(app.request.getLocale()).title }}</h2>
                     <p>{{ article.translate(app.request.getLocale()).content }}</p>
                     <small>{{ article.author }}</small>
@@ -24,7 +24,7 @@
 
             <div class="row">
                 <h1>Articles Bis</h1>
-                {% for article in articlesBis %}
+                {% for article in articles['articlesBis'] %}
                     <h2>{{ article.translate(app.request.getLocale()).title }}</h2>
                     <h3>{{ article.translate(app.request.getLocale()).title2 }}</h3>
                     <h4>{{ article.translate(app.request.getLocale()).title3 }}</h4>

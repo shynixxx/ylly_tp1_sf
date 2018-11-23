@@ -13,21 +13,24 @@ use AppBundle\Entity\Kitten;
 use AppBundle\Entity\Page;
 use AppBundle\Entity\PageBis;
 use AppBundle\Entity\PageTer;
+use AppBundle\WebService\GoogleTranslateInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/{_locale}", name="homepage", defaults={"_locale"="en"}, requirements={
-     *     "_locale"="en|fr|it|es|de"
-     * })
+     * @Route("/{_locale}", name="homepage", defaults={"_locale"="en"}, requirements={"_locale"="en|fr|it|es|de"})
      *
+     * @param Request $request
      * @param mixed $_locale
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param GoogleTranslateInterface $googleTranslateInterface
+     *
+     * @return Response
      */
-    public function indexAction(Request $request, $_locale)
+    public function indexAction(Request $request, $_locale, GoogleTranslateInterface $googleTranslateInterface)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,10 +48,17 @@ class DefaultController extends Controller
             'dogs' => Dog::class,
         ];
 
+
         foreach ($classes as $key => $class) {
-            $vars[$key] = $em->getRepository($class)->findAll();
+            $articles[$key] = $em->getRepository($class)->findAll();
         }
 
-        return $this->render('default/index.html.twig', $vars);
+
+        $text = 'HELLO';
+
+        $translate = $googleTranslateInterface->getTranslate($text, $_locale, $class);
+
+
+        return $this->render('default/index.html.twig', ['subtitle' => $translate, 'articles' => $articles]);
     }
 }
